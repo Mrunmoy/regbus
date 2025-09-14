@@ -50,16 +50,17 @@ struct MyTraits<MyKey::CMD_RESET>
 // 4) Build a registry over a fixed key list
 using MyReg = regbus::Registry<MyKey, MyTraits, MyKey::IMU_RAW, MyKey::FUSION_STATE, MyKey::CMD_RESET>;
 
+void print_regbus_version()
+{
+    printf("regbus %s (0x%06x)\n", regbus::version_string, regbus::version_hex);
+}
+
 int main()
 {
     static_assert(REGBUS_VERSION_AT_LEAST(0, 1, 0),
                   "Need regbus >= 0.1.0 for Registry<Traits> support");
 
-    void print_regbus_version()
-    {
-        printf("regbus %s (0x%06x)\n", regbus::version_string, regbus::version_hex);
-    }
-
+    print_regbus_version();
     MyReg reg;
 
     // Writer thread: IMU samples
