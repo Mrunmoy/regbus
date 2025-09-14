@@ -2,6 +2,7 @@
 #include <thread>
 #include <chrono>
 
+#include "regbus/version.hpp"
 #include "regbus/Registry.hpp"
 
 // 1) Define your key set
@@ -51,6 +52,14 @@ using MyReg = regbus::Registry<MyKey, MyTraits, MyKey::IMU_RAW, MyKey::FUSION_ST
 
 int main()
 {
+    static_assert(REGBUS_VERSION_AT_LEAST(0, 1, 0),
+                  "Need regbus >= 0.1.0 for Registry<Traits> support");
+
+    void print_regbus_version()
+    {
+        printf("regbus %s (0x%06x)\n", regbus::version_string, regbus::version_hex);
+    }
+
     MyReg reg;
 
     // Writer thread: IMU samples

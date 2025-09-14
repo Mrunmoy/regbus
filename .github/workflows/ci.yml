@@ -3,8 +3,9 @@ name: ci
 on:
   push:
     branches: [ main ]
-    tags:     [ 'v*.*.*' ]   # run on version tags too
+    tags: [ 'v*.*.*' ]     # run on version tags too
   pull_request:
+    branches: [ main ]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -27,14 +28,14 @@ jobs:
             echo "CC=clang"  >> $GITHUB_ENV
             echo "CXX=clang++" >> $GITHUB_ENV
           else
-            echo "CC=gcc"    >> $GITHUB_ENV
-            echo "CXX=g++"   >> $GITHUB_ENV
+            echo "CC=gcc"  >> $GITHUB_ENV
+            echo "CXX=g++" >> $GITHUB_ENV
           fi
 
       - name: Install Ninja
         run: sudo apt-get update && sudo apt-get install -y ninja-build
 
-      - name: Configure
+      - name: Configure (RelWithDebInfo)
         run: |
           cmake -S . -B build -G Ninja \
             -DREGBUS_BUILD_TESTS=ON \
@@ -47,7 +48,10 @@ jobs:
       - name: Run tests
         run: ctest --test-dir build --output-on-failure
 
-      - name: Package headers
+      # ---- package & publish only once (gcc leg) ----
+
+      - name: Package headers (gcc only)
+        if: ${{ matrix.compiler == 'gcc' }}
         run: |
           cd build
           mkdir -p dist
@@ -55,15 +59,15 @@ jobs:
           cd ..
           zip -r regbus-headers.zip include LICENSE README.md CMakeLists.txt
 
-      - name: Upload artifact (PRs & pushes)
+      - name: Upload artifact (gcc only)
+        if: ${{ matrix.compiler == 'gcc' }}
         uses: actions/upload-artifact@v4
         with:
           name: regbus-headers
           path: regbus-headers.zip
 
-      # When building a tag like v0.1.0, publish a GitHub Release with the zipped headers
-      - name: Publish release (on tag)
-        if: startsWith(github.ref, 'refs/tags/')
+      - name: Publish GitHub Release (on tag, gcc only)
+        if: ${{ startsWith(github.ref, 'refs/tags/') && matrix.compiler == 'gcc' }}
         uses: softprops/action-gh-release@v2
         with:
           files: regbus-headers.zip
