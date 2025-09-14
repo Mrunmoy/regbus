@@ -1,4 +1,9 @@
+
 # regbus — tiny, header-only real-time “register bus” for C++17
+
+[![CI](https://github.com/USERNAME/regbus/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/USERNAME/regbus/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/USERNAME/regbus?display_name=tag&sort=semver)](https://github.com/USERNAME/regbus/releases)
+
 
 **regbus** is a **zero-allocation**, **header-only** C++17 library for sharing data between producers and consumers in real-time systems (embedded, robotics, telemetry, games). It provides **double-buffered “latest value” registers** and **edge-trigger commands** with **lock-free-ish** access semantics and **coherent snapshot reads**—perfect for sensor → fusion → UI pipelines.
 
