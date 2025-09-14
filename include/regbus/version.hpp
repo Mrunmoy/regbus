@@ -4,8 +4,8 @@
 // Update these macros when you cut a release tag.
 #define REGBUS_VERSION_MAJOR 0
 #define REGBUS_VERSION_MINOR 1
-#define REGBUS_VERSION_PATCH 0
-#define REGBUS_VERSION_STRING "0.1.0"
+#define REGBUS_VERSION_PATCH 1
+#define REGBUS_VERSION_STRING "0.1.1"
 
 // 0xMMmmpp -> e.g., 0.1.0 -> 0x000100
 #define REGBUS_VERSION_HEX ((REGBUS_VERSION_MAJOR << 16) | (REGBUS_VERSION_MINOR << 8) | (REGBUS_VERSION_PATCH))
