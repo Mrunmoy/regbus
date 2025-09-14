@@ -1,5 +1,8 @@
 name: ci
 
+permissions:
+  contents: write  # <-- allow creating GitHub Releases
+
 on:
   push:
     branches: [ main ]
